@@ -1,0 +1,20 @@
+name: nuage-vsc
+summary: Nuage VSC component
+maintainer: Aniket Bhat <abhat@nuagenetworks.net>
+description: |
+  Nuage VSC provides a highly scalable, high availability, high performance SDN controller for network virtualization of data centers.
+  .
+  This charm is used to configure the VSC node as a VM inside a KVM machine orchestrated by Juju and is used to control the Nuage VRS.
+tags:
+  - misc
+  - openstack
+subordinate: false
+
+provides:
+  vrsg-controller-service:
+    interface: nuage-vrsg-control
+  vrs-controller-service:
+    interface: nuage-vrs-control
+requires:
+  vsd-service:
+    interface: nuage-xmpp 

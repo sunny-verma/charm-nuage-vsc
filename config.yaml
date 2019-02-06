@@ -1,0 +1,54 @@
+options:
+  vsc-image-name:
+    type: string
+    default: "vsc_singledisk.qcow2"
+    description: "Optional: A image file name that is present in the payload or fetched directory to configure the VSC image on KVM"
+  vsc-template-name:
+    type: string
+    default: "vsc.xml"
+    description: "Optional: A vm definition file template name that is present in the templates directory to configure the VSC image on KVM"
+  vsc-repository-url:
+    type: string
+    default:
+    description: " URL to get the Nuage VSC image( This config option is required ) ."
+  vsc-vm-disk-size:
+    type: string
+    default: 20G
+    description: "Optional: VSC VM disk size in G"
+  xmpp-cluster-domain-name:
+    type: string
+    default:
+    description: "Optional: Domain name for the XMPP cluster overrides relation_changed hook. This is the DNS name associated withthe VSD IP. Only used when nuage-vsd is deployed outside of juju env"
+  admin-user:
+    default: admin
+    type: string
+    description: "Optional: vsc user name"
+  admin-password:
+    default: admin
+    type: string
+    description: "Optional: vsc password."
+  vsc-vm-ip-address:
+    type: string
+    default:
+    description: "IP Address of the VSC VM ( This config option is required )"
+  vsc-vm-default-gw: 
+    type: string
+    default:
+    description: "Gateway for the VSC VM. Gateway that your VSD-VM will use to reach to other services in juju env like nauge-vsd ( This config option is required ) "
+  vsc-vm-dns-server:
+    type: string
+    default:
+    description: "DNS Server which will be used to resolve the DNS for VSD-VM IP.( This config option is required )"
+  vsc-vm-subnet-mask-length:
+    type: string
+    default:
+    description: "Length of the subnet mask for the VSC VM IP ( This config option is required )"
+  bridge-name:
+    type: string
+    default: 'juju-br0'
+    description: "Optional: Bridge you want to use for VSC-VM"
+  vsc-vm-memory:
+    type: string
+    default: '4147483'
+    description: "Optional: Memory for VSC VM"
+
