@@ -169,7 +169,7 @@ class RequiredConfig(dict):
                 return False
         return True
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.__bool__()
 
 
@@ -196,7 +196,7 @@ class StoredContext(dict):
         if not os.path.isabs(file_name):
             file_name = os.path.join(hookenv.charm_dir(), file_name)
         with open(file_name, 'w') as file_stream:
-            os.fchmod(file_stream.fileno(), 0600)
+            os.fchmod(file_stream.fileno(), 0o600)
             yaml.dump(config_data, file_stream)
 
     def read_context(self, file_name):
@@ -219,7 +219,7 @@ class TemplateCallback(ManagerCallback):
     :param str group: The group of the rendered file
     :param int perms: The permissions of the rendered file
     """
-    def __init__(self, source, target, owner='root', group='root', perms=0444):
+    def __init__(self, source, target, owner='root', group='root', perms=0o444):
         self.source = source
         self.target = target
         self.owner = owner

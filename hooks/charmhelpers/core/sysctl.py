@@ -25,7 +25,7 @@ def create(sysctl_dict, sysctl_file):
     sysctl_dict = yaml.load(sysctl_dict)
 
     with open(sysctl_file, "w") as fd:
-        for key, value in sysctl_dict.items():
+        for key, value in list(sysctl_dict.items())
             fd.write("{}={}\n".format(key, value))
 
     log("Updating sysctl_file: %s values: %s" % (sysctl_file, sysctl_dict),

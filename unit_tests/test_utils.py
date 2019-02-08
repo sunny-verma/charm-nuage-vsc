@@ -38,7 +38,7 @@ def get_default_config():
     '''
     default_config = {}
     config = load_config()
-    for k, v in config.iteritems():
+    for k, v in list(config.items()):
         if 'default' in v:
             default_config[k] = v['default']
         else:

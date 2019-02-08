@@ -230,7 +230,7 @@ class Storage(object):
         :param str prefix: Optional prefix to apply to all keys in `mapping`
             before setting
         """
-        for k, v in mapping.items():
+        for k, v in list(mapping.items()):
             self.set("%s%s" % (prefix, k), v)
 
     def unset(self, key):
@@ -409,7 +409,7 @@ class Storage(object):
             ''', [key])
         if deserialize is False:
             return self.cursor.fetchall()
-        return map(_parse_history, self.cursor.fetchall())
+        return list(map(_parse_history, self.cursor.fetchall()))
 
     def debug(self, fh=sys.stderr):
         self.cursor.execute('select * from kv')

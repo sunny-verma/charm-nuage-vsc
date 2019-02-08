@@ -131,7 +131,7 @@ class ServiceManager(object):
         data to set.
         """
         hook_name = hookenv.hook_name()
-        for service in self.services.values():
+        for service in list(self.services.values()):
             for provider in service.get('provided_data', []):
                 if re.match(r'{}-relation-(joined|changed)'.format(provider.name), hook_name):
                     data = provider.provide_data()
@@ -146,7 +146,7 @@ class ServiceManager(object):
 
         If no service names are given, reconfigures all registered services.
         """
-        for service_name in service_names or self.services.keys():
+        for service_name in service_names or list(self.services.keys()):
             if self.is_ready(service_name):
                 self.fire_event('data_ready', service_name)
                 self.fire_event('start', service_name, default=[
@@ -167,7 +167,7 @@ class ServiceManager(object):
 
         If no service names are given, stops all registered services.
         """
-        for service_name in service_names or self.services.keys():
+        for service_name in service_names or list(self.services.keys()):
             self.fire_event('stop', service_name, default=[
                 manage_ports,
                 service_stop])

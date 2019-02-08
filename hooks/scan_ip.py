@@ -40,7 +40,7 @@ class ScannerThread(threading.Thread):
                     log("ping command failed with value error",
                         level=log_level)
                     return
-                except subprocess.CalledProcessError, e:
+                except subprocess.CalledProcessError as e:
                     log("ping command failed with error {0}"
                         .format(e.returncode), level=log_level)
                     return

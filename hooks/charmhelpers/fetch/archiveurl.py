@@ -1,7 +1,7 @@
 import os
-import urllib2
-from urllib import urlretrieve
-import urlparse
+import urllib.request, urllib.error, urllib.parse
+from urllib.request import urlretrieve
+import urllib.parse
 import hashlib
 
 from charmhelpers.fetch import (
@@ -42,20 +42,20 @@ class ArchiveUrlFetchHandler(BaseFetchHandler):
         """
         # propogate all exceptions
         # URLError, OSError, etc
-        proto, netloc, path, params, query, fragment = urlparse.urlparse(source)
+        proto, netloc, path, params, query, fragment = urllib.parse.urlparse(source)
         if proto in ('http', 'https'):
-            auth, barehost = urllib2.splituser(netloc)
+            auth, barehost = urllib.parse.splituser(netloc)
             if auth is not None:
-                source = urlparse.urlunparse((proto, barehost, path, params, query, fragment))
-                username, password = urllib2.splitpasswd(auth)
-                passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+                source = urllib.parse.urlunparse((proto, barehost, path, params, query, fragment))
+                username, password = urllib.parse.splitpasswd(auth)
+                passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
                 # Realm is set to None in add_password to force the username and password
                 # to be used whatever the realm
                 passman.add_password(None, source, username, password)
-                authhandler = urllib2.HTTPBasicAuthHandler(passman)
-                opener = urllib2.build_opener(authhandler)
-                urllib2.install_opener(opener)
-        response = urllib2.urlopen(source)
+                authhandler = urllib.request.HTTPBasicAuthHandler(passman)
+                opener = urllib.request.build_opener(authhandler)
+                urllib.request.install_opener(opener)
+        response = urllib.request.urlopen(source)
         try:
             with open(dest, 'w') as dest_file:
                 dest_file.write(response.read())
@@ -91,16 +91,16 @@ class ArchiveUrlFetchHandler(BaseFetchHandler):
         url_parts = self.parse_url(source)
         dest_dir = os.path.join(os.environ.get('CHARM_DIR'), 'fetched')
         if not os.path.exists(dest_dir):
-            mkdir(dest_dir, perms=0755)
+            mkdir(dest_dir, perms=0o755)
         dld_file = os.path.join(dest_dir, os.path.basename(url_parts.path))
         try:
             self.download(source, dld_file)
-        except urllib2.URLError as e:
+        except urllib.error.URLError as e:
             raise UnhandledSource(e.reason)
         except OSError as e:
             raise UnhandledSource(e.strerror)
-        options = urlparse.parse_qs(url_parts.fragment)
-        for key, value in options.items():
+        options = urllib.parse.parse_qs(url_parts.fragment)
+        for key, value in list(options.items()):
             if key in hashlib.algorithms:
                 check_hash(dld_file, value, key)
         if checksum:

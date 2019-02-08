@@ -1,6 +1,6 @@
 from mock import patch, call
 import os
-from test_utils import (
+from .test_utils import (
     CharmTestCase,
 )
 

@@ -20,7 +20,7 @@
 # Authors:
 #  Charm Helpers Developers <juju@lists.ubuntu.com>
 
-from __future__ import print_function
+
 import copy
 from distutils.version import LooseVersion
 from functools import wraps
@@ -286,7 +286,7 @@ class Config(dict):
         self.path = path or self.path
         with open(self.path) as f:
             self._prev_dict = json.load(f)
-        for k, v in copy.deepcopy(self._prev_dict).items():
+        for k, v in list(copy.deepcopy(self._prev_dict).items()):
             if k not in self:
                 self[k] = v
 
@@ -375,7 +375,7 @@ def relation_set(relation_id=None, relation_settings=None, **kwargs):
         relation_cmd_line.extend(('-r', relation_id))
     settings = relation_settings.copy()
     settings.update(kwargs)
-    for key, value in settings.items():
+    for key, value in list(settings.items()):
         # Force value to be a string: it always should, but some call
         # sites pass in things like dicts or numbers.
         if value is not None:
@@ -391,7 +391,7 @@ def relation_set(relation_id=None, relation_settings=None, **kwargs):
             relation_cmd_line + ["--file", settings_file.name])
         os.remove(settings_file.name)
     else:
-        for key, value in settings.items():
+        for key, value in list(settings.items()):
             if value is None:
                 relation_cmd_line.append('{}='.format(key))
             else:
@@ -486,7 +486,7 @@ def relation_types():
     for key in ('provides', 'requires', 'peers'):
         section = md.get(key)
         if section:
-            rel_types.extend(section.keys())
+            rel_types.extend(list(section.keys()))
     return rel_types
 
 
@@ -527,7 +527,7 @@ def role_and_interface_to_relations(role, interface_name):
     """
     _metadata = metadata()
     results = []
-    for relation_name, relation in _metadata.get(role, {}).items():
+    for relation_name, relation in list(_metadata.get(role, {}).items()):
         if relation['interface'] == interface_name:
             results.append(relation_name)
     return results
@@ -584,7 +584,7 @@ def is_relation_made(relation, keys='private-address'):
             for k in keys:
                 context[k] = relation_get(k, rid=r_id,
                                           unit=unit)
-            if None not in context.values():
+            if None not in list(context.values()):
                 return True
     return False
 
@@ -856,7 +856,7 @@ def leader_set(settings=None, **kwargs):
     cmd = ['leader-set']
     settings = settings or {}
     settings.update(kwargs)
-    for k, v in settings.items():
+    for k, v in list(settings.items()):
         if v is None:
             cmd.append('{}='.format(k))
         else:

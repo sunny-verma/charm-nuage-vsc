@@ -25,7 +25,7 @@ def is_vm_running(vmconfig):
             return True
         else:
             return False
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         log("Error: is_vm_running Failed with error:{}"
             .format(e.returncode), level=ERROR)
         return False
@@ -44,7 +44,7 @@ def wait_for_vm_to_be_pingable(vm_ip_address):
             else:
                 log("successfully pinged {}".format(vm_ip_address))
                 return
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as  e:
         log("Error: wait_for_vm_to_be_pingable "
             "failed with error:{}".format(e.returncode),
             level=ERROR)
@@ -61,7 +61,7 @@ def _run_virsh_command(cmd, vmconfig, ignore=False):
     if ignore:
         log_level = None
     env = os.environ.copy()
-    for key, value in vmconfig.iteritems():
+    for key, value in list(vmconfig.items()):
         log('virsh env key:{0} value:{1}'.format(key, value))
         env[key] = value
 
@@ -81,7 +81,7 @@ def _run_virsh_command(cmd, vmconfig, ignore=False):
         if ignore:
             return
         sys.exit(1)
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         log("Error: virsh cmd {0} Failed with error:{1}"
             .format(cmd, e.returncode), level=log_level)
         if ignore:
@@ -126,7 +126,7 @@ def createnet(netxml, netname):
         subprocess.check_output(
             ['bash', '-c',
              'virsh net-start {}'.format(netname)])
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         log("Error: createnet Failed with error:{}"
             .format(e.returncode), level=ERROR)
         return None
@@ -142,7 +142,7 @@ def install_guestfs():
         subprocess.check_output(
             ['bash', '-c', 'sudo chmod +r /boot/vmlinuz-*'])
 
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         log("Error: install_guestfs Failed with error:{}"
             .format(str(e.returncode)), level=ERROR)
         return None
@@ -156,7 +156,7 @@ def write_guestfs(vm_img, file, contents):
             ['bash', '-c', 'guestfish add {0} : run : mount /dev/sda1 /'
                            ' : write {1} \"{2}\"'
                 .format(vm_img, file, contents)])
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         log("Error: install_guestfs Failed with error:{}"
             .format(str(e.returncode)), level=ERROR)
         return None
@@ -187,7 +187,7 @@ def get_domain_name(ip_address):
             domain_name = result_str.replace('name = ', '')
             domain_name = domain_name.strip('. \n')
         return domain_name
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         log("Error: get_domain_name Failed with error:{}"
             .format(e.returncode), level=ERROR)
         return None
