@@ -4,9 +4,11 @@
 __author__ = 'Jorge Niedbalski R. <jorge.niedbalski@canonical.com>'
 
 import os
+import io
 
 
-class Fstab(file):
+
+class Fstab(io.FileIO):
     """This class extends file in order to implement a file reader/writer
     for file `/etc/fstab`
     """
@@ -45,7 +47,7 @@ class Fstab(file):
             self._path = path
         else:
             self._path = self.DEFAULT_PATH
-        file.__init__(self, self._path, 'r+')
+        super(Fstab, self).__init__(self._path, 'rb+')
 
     def _hydrate_entry(self, line):
         # NOTE: use split with no arguments to split on any
