@@ -56,7 +56,7 @@ charm_vm_config['VSP_VM_NAME'] = 'vsc'
 charm_vm_config['VSP_VM_IMAGE_NAME'] = 'nuage_vsc.img'
 
 
-@hooks.hook('install')
+@hooks.hook('install.real')
 def install():
     e = 'Installing nuage-vsc'
     status_set('maintenance', e)
