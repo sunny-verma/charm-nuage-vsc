@@ -60,8 +60,8 @@ charm_vm_config['VSP_VM_IMAGE_NAME'] = 'nuage_vsc.img'
 def install():
     e = 'Installing nuage-vsc'
     status_set('maintenance', e)
-    dependencies = 'ubuntu-virt-server python-vm-builder bridge-utils '\
-                   'virtinst python-cheetah python-pexpect python-paramiko'
+    dependencies = 'qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virt-manager'\
+                   ' virtinst python-cheetah python-pexpect python-paramiko'
     apt_update(fatal=True)
     apt_install(dependencies.split(), fatal=True)
     if (find_executable('virsh') is None or
